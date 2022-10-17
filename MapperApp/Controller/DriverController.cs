@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MapperApp.Models;
+using MapperApp.DTOs.Incoming;
 
 namespace MapperApp.Controller
 {
@@ -27,12 +28,23 @@ namespace MapperApp.Controller
 
         //POST
         [HttpPost]
-        public IActionResult CreateDriver(Driver data)
+        public IActionResult CreateDriver(DriverForCreationDto data)
         {
             if(ModelState.IsValid)
             {
-                drivers.Add(data);
-                return CreatedAtAction("GetDrivers", new { data.Id }, data);
+                var _driver = new Driver()
+                {
+                    Id = Guid.NewGuid(),
+                    Status = 1,
+                    DateAdded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    DriverNumber = data.DriverNumber,
+                    FirstName = data.FirstName,
+                    LastName = data.LastName,
+                    WorldChampionships = data.WorldChampionships
+                };
+                drivers.Add(_driver);
+                return CreatedAtAction("GetDrivers", new { _driver.Id }, data);
             }
 
             return new JsonResult("Something went Wrong") {StatusCode =500};
