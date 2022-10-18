@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MapperApp.Models;
 using MapperApp.DTOs.Incoming;
+using AutoMapper;
+using MapperApp.DTOs.Outgoing;
 
 namespace MapperApp.Controller
 {
@@ -12,9 +14,11 @@ namespace MapperApp.Controller
         private readonly ILogger<DriverController> _logger;
 
         private static List<Driver> drivers = new List<Driver>();
-        public DriverController(ILogger<DriverController> logger)
+        private readonly IMapper _mapper;
+        public DriverController(ILogger<DriverController> logger, IMapper mapper)
         {
             _logger = logger;
+            _mapper = mapper;
         }
 
         //GET
@@ -23,7 +27,9 @@ namespace MapperApp.Controller
         public IActionResult GetDrivers()
         {
             var allDrivers = drivers.Where(x => x.Status == 1).ToList();
-            return Ok(allDrivers);
+
+            var _drivers = _mapper.Map<IEnumerable<DriverDto>>(allDrivers);
+            return Ok(_drivers);
         }
 
         //POST
@@ -32,19 +38,12 @@ namespace MapperApp.Controller
         {
             if(ModelState.IsValid)
             {
-                var _driver = new Driver()
-                {
-                    Id = Guid.NewGuid(),
-                    Status = 1,
-                    DateAdded = DateTime.Now,
-                    DateUpdated = DateTime.Now,
-                    DriverNumber = data.DriverNumber,
-                    FirstName = data.FirstName,
-                    LastName = data.LastName,
-                    WorldChampionships = data.WorldChampionships
-                };
+                var _driver = _mapper.Map<Driver>(data);
+
                 drivers.Add(_driver);
-                return CreatedAtAction("GetDrivers", new { _driver.Id }, data);
+
+                var newDriver = _mapper.Map<DriverDto>(_driver);
+                return CreatedAtAction("GetDrivers", new { _driver.Id }, newDriver);
             }
 
             return new JsonResult("Something went Wrong") {StatusCode =500};

@@ -25,3 +25,5 @@ C:\Personal\MapperApp\MapperApp\obj\Debug\net6.0\refint\MapperApp.dll
 C:\Personal\MapperApp\MapperApp\obj\Debug\net6.0\MapperApp.pdb
 C:\Personal\MapperApp\MapperApp\obj\Debug\net6.0\MapperApp.genruntimeconfig.cache
 C:\Personal\MapperApp\MapperApp\obj\Debug\net6.0\ref\MapperApp.dll
+C:\Personal\MapperApp\MapperApp\bin\Debug\net6.0\AutoMapper.dll
+C:\Personal\MapperApp\MapperApp\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
